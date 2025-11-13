@@ -1,0 +1,52 @@
+services:
+  # 1. Node.js (Express) Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: pollpulse_backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - pollpulse-network
+    depends_on:
+      - db
+    environment:
+      MONGO_URI: mongodb://db:27017/pollpulse
+
+  # 2. Angular Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: pollpulse_frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - pollpulse-network
+    stdin_open: true
+    tty: true
+
+  # 3. MongoDB Database
+  db:
+    image: mongo:latest
+    container_name: pollpulse_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - pollpulse-network
+
+networks:
+  pollpulse-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
