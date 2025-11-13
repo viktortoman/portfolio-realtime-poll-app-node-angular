@@ -32,6 +32,8 @@ services:
       - pollpulse-network
     stdin_open: true
     tty: true
+    environment:
+      - NG_CLI_ANALYTICS=false
 
   # 3. MongoDB Database
   db:
