@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # 1. Node.js (Express) Backend
   backend:
@@ -6,7 +8,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: pollpulse_backend
     ports:
-      - "3000:3000"
+      - "${NODE_PORT}:${NODE_PORT}"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -15,7 +17,10 @@ services:
     depends_on:
       - db
     environment:
-      MONGO_URI: mongodb://db:27017/pollpulse
+      MONGO_HOST: ${NODE_MONGO_HOST}
+      MONGO_PORT: ${NODE_MONGO_PORT}
+      MONGO_DB_NAME: ${NODE_MONGO_DB_NAME}
+      PORT: ${NODE_PORT}
 
   # 2. Angular Frontend
   frontend:
@@ -24,7 +29,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: pollpulse_frontend
     ports:
-      - "4200:4200"
+      - "${NG_PORT}:4200"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -40,7 +45,10 @@ services:
     image: mongo:latest
     container_name: pollpulse_db
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - mongo_data:/data/db
     networks:

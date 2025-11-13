@@ -1,0 +1,4 @@
+.env
+
+# Docker
+mongo_data/

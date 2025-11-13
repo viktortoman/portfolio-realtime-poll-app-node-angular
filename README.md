@@ -4,6 +4,8 @@ PollPulse is a full-stack, real-time polling application built to demonstrate th
 
 Users can create polls, vote, and see the results update instantly on their screen without refreshing the page. The entire development environment is containerized with Docker Compose.
 
+
+
 ---
 
 ## 🚀 Technology Stack
@@ -12,6 +14,7 @@ Users can create polls, vote, and see the results update instantly on their scre
 * **Backend:** Node.js (v20+), Express.js
 * **Database:** MongoDB
 * **Real-time:** WebSockets (Socket.io)
+* **API Documentation:** Swagger (via static `swagger.json`)
 * **Containerization:** Docker & Docker Compose
 
 ---
@@ -33,18 +36,25 @@ This entire development environment (frontend, backend, and database) is contain
     cd portfolio-realtime-poll-app-node-angular
     ```
 
-2.  **Build and Run the Containers:**
+2.  **Create the Environment File:**
+    This project uses an example file to manage environment variables. Copy it to create your local `.env` file.
+
+    *On macOS / Linux:*
+    ```bash
+    cp .env.example .env
+    ```
+    *On Windows (Command Prompt):*
+    ```bash
+    copy .env.example .env
+    ```
+    *(The default values in this file are already configured to work with the Docker setup.)*
+
+3.  **Build and Run the Containers:**
     ```bash
     docker-compose up -d --build
     ```
 
 That's it! All services are now running in development mode with hot-reloading enabled.
-
-* The `docker-compose` command automatically:
-    * Builds the `backend` and `frontend` images.
-    * Installs all `npm` dependencies inside the containers.
-    * Starts the Node.js (`nodemon`), Angular (`ng serve`), and MongoDB services.
-    * Connects all services to a shared Docker network.
 
 ## 🌐 Environment & Access Points
 
@@ -54,19 +64,23 @@ Once `docker-compose up` is complete, the environment is ready:
 
 * **Access:** `http://localhost:4200`
 * **Location:** `/frontend` directory
-* **Details:** This is the Angular development server (`ng serve`). It features hot-reloading, so any changes you make to the Angular code will be reflected instantly in your browser.
+* **Details:** The Angular development server (`ng serve`) with hot-reloading.
 
 ### 2. Backend (Node.js API)
 
 * **Access:** `http://localhost:3000`
 * **Location:** `/backend` directory
-* **Details:** This is the Node.js/Express server running via `nodemon`. It will automatically restart if you change any backend code.
-* **Test Endpoint:** You can visit `http://localhost:3000/api/status` to see a JSON response confirming the backend is running.
+* **Details:** The Node.js/Express server running via `nodemon` with hot-reloading.
 
-### 3. Database (MongoDB)
+### 3. API Documentation (Swagger)
+
+* **Access:** `http://localhost:3000/api-docs`
+* **Details:** A static, interactive Swagger UI documentation for the API.
+
+### 4. Database (MongoDB)
 
 * **Access (Host):** `mongodb://localhost:27017`
-* **Access (Container):** The Node.js backend connects to it via the service name `mongodb://db:27017/pollpulse`.
+* **Access (Container):** The Node.js backend connects via the environment variables defined in the `.env` file (e.g., `mongodb://db:27017/pollpulse`).
 * **Details:** You can connect to this database using a GUI tool like **MongoDB Compass** to view your data.
 * **Persistence:** Database data is stored in a Docker volume (`mongo_data`) so it persists even when you stop or remove the containers.
 
@@ -77,6 +91,10 @@ Once `docker-compose up` is complete, the environment is ready:
 * **To stop all containers:**
     ```bash
     docker-compose down
+    ```
+* **To stop and remove data volumes (fresh start):**
+    ```bash
+    docker-compose down -v
     ```
 * **To see the logs (e.g., for the 'backend' service):**
     ```bash

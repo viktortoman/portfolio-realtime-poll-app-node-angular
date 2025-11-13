@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PollPulse API",
+    "version": "1.0.0",
+    "description": "The official API documentation for the PollPulse real-time application."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development (Docker) Server"
+    }
+  ],
+  "paths": {
+    "/api/polls": {
+      "post": {
+        "summary": "Create a new poll",
+        "tags": [
+          "Polls"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPoll"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Poll created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Poll"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (e.g., missing question or not enough options)"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all polls",
+        "tags": [
+          "Polls"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of all polls",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Poll"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/polls/{id}": {
+      "get": {
+        "summary": "Get a single poll by ID",
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the poll to get",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A single poll object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Poll"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Poll not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PollOption": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "6735e..."
+          },
+          "name": {
+            "type": "string",
+            "example": "React"
+          },
+          "votes": {
+            "type": "number",
+            "example": 0
+          }
+        }
+      },
+      "Poll": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "6735e..."
+          },
+          "question": {
+            "type": "string",
+            "example": "Which is the best framework?"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PollOption"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NewPoll": {
+        "type": "object",
+        "description": "The data required to create a new poll",
+        "required": [
+          "question",
+          "options"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "example": "Which is the best framework?"
+          },
+          "options": {
+            "type": "array",
+            "description": "An array of strings for the poll options",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Angular",
+              "React",
+              "Vue"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
