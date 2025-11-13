@@ -40,7 +40,7 @@
             }
           },
           "400": {
-            "description": "Bad request (e.g., missing question or not enough options)"
+            "description": "Bad request"
           },
           "500": {
             "description": "Server error"
@@ -102,6 +102,53 @@
           },
           "404": {
             "description": "Poll not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/polls/{id}/vote": {
+      "post": {
+        "summary": "Cast a vote on a specific poll option",
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the poll to vote on",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewVote"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Vote cast successfully, returns updated poll",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Poll"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Poll or Option not found"
           },
           "500": {
             "description": "Server error"
@@ -175,6 +222,20 @@
               "React",
               "Vue"
             ]
+          }
+        }
+      },
+      "NewVote": {
+        "type": "object",
+        "description": "The data required to cast a vote",
+        "required": [
+          "optionId"
+        ],
+        "properties": {
+          "optionId": {
+            "type": "string",
+            "description": "The _id of the specific option to vote for",
+            "example": "6735e..."
           }
         }
       }

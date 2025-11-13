@@ -26,7 +26,8 @@ app.get('/api/status', (req, res) => {
   res.json({ status: 'Backend is running and connected to DB!' });
 });
 
-app.use('/api/polls', require('./routes/pollRoutes'));
+const pollRoutes = require('./routes/pollRoutes')(io);
+app.use('/api/polls', pollRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
