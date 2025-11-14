@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Edit Poll Question</h1>
+
+<div mat-dialog-content>
+    <form (ngSubmit)="onSave()">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Question</mat-label>
+            <textarea
+                    matInput
+                    [(ngModel)]="newQuestion"
+                    name="question"
+                    rows="3"
+                    required
+                    cdkFocusInitial
+                    [disabled]="isLoading"
+            ></textarea>
+        </mat-form-field>
+        <div *ngIf="error" class="error-message">
+            {{ error }}
+        </div>
+    </form>
+</div>
+
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" (click)="onSave()" [disabled]="isLoading">
+        <mat-spinner *ngIf="isLoading" diameter="20" class="spinner-inline"></mat-spinner>
+        {{ isLoading ? 'Saving...' : 'Save Changes' }}
+    </button>
+</div>

@@ -107,8 +107,74 @@
             "description": "Server error"
           }
         }
+      },
+      "put": {
+        "summary": "Update a poll's question",
+        "tags": [ "Polls" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the poll to update",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "question": { "type": "string", "example": "Is the new question better?" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Poll updated successfully", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Poll" } } } },
+          "400": { "description": "Invalid question format" },
+          "404": { "description": "Poll not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a single poll by ID",
+        "tags": [ "Polls" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the poll to delete",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Poll deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Poll deleted" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Poll not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
       }
-    },
+  },
     "/api/polls/{id}/vote": {
       "post": {
         "summary": "Cast a vote on a specific poll option",

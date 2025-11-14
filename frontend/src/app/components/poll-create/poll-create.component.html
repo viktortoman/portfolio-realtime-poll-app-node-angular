@@ -1,0 +1,88 @@
+<div class="container">
+    <mat-card class="create-card">
+        <mat-card-header>
+            <mat-card-title>Create a New Poll</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form (ngSubmit)="submitPoll()" class="poll-form">
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Your Question</mat-label>
+                    <input
+                            matInput
+                            [(ngModel)]="question"
+                            name="question"
+                            required
+                            [disabled]="isLoading"
+                    >
+                </mat-form-field>
+
+                <h3 class="options-title">Options</h3>
+
+                <div *ngFor="let option of options; let i = index; trackBy: trackByIndex" class="option-row">
+
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Option {{ i + 1 }}</mat-label>
+                        <input
+                                matInput
+                                [(ngModel)]="options[i]"
+                                [name]="'option' + i"
+                                required
+                                [disabled]="isLoading"
+                        >
+
+                        <button
+                                mat-icon-button
+                                matSuffix
+                                color="warn"
+                                type="button"
+                                (click)="removeOption(i)"
+                                *ngIf="options.length > 2"
+                                [disabled]="isLoading"
+                                aria-label="Remove option"
+                        >
+                            <mat-icon>remove_circle</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                </div>
+
+                <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        (click)="addOption()"
+                        [disabled]="isLoading"
+                >
+                    <mat-icon>add</mat-icon>
+                    Add Option
+                </button>
+
+                <div *ngIf="error" class="error-message">
+                    {{ error }}
+                </div>
+
+                <div class="actions">
+                    <button
+                            mat-stroked-button
+                            routerLink="/"
+                            type="button"
+                            [disabled]="isLoading"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                            mat-flat-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="isLoading"
+                    >
+                        {{ isLoading ? 'Saving...' : 'Create Poll' }}
+                    </button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

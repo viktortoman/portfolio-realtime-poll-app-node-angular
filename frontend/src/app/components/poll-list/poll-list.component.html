@@ -1,0 +1,78 @@
+<div class="container">
+    <header class="header">
+        <h1>PollPulse</h1>
+        <p>Live Polls - Powered by Angular, Node.js, and WebSockets</p>
+
+        <button
+                mat-fab
+                extended
+                color="primary"
+                routerLink="/create"
+                class="create-poll-button"
+        >
+            <mat-icon>add</mat-icon>
+            Create New Poll
+        </button>
+    </header>
+
+    <div *ngIf="isLoading" class="centered-message">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading polls...</p>
+    </div>
+
+    <div *ngIf="error" class="centered-message error">
+        <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="poll-grid">
+
+        <mat-card *ngFor="let poll of polls" class="poll-card">
+            <mat-card-header>
+                <mat-card-title>{{ poll.question }}</mat-card-title>
+
+                <span class="header-spacer"></span>
+
+                <button
+                        mat-icon-button
+                        color="primary"
+                        aria-label="Edit poll"
+                        (click)="openEditDialog(poll)"
+                        class="mr-2"
+                >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                        mat-icon-button
+                        color="warn"
+                        aria-label="Delete poll"
+                        (click)="openDeleteDialog(poll._id, poll.question)"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="poll-options">
+                    <div *ngFor="let option of poll.options" class="option">
+
+                        <span class="option-name">{{ option.name }}</span>
+
+                        <div class="option-actions">
+                            <span class="option-votes">{{ option.votes }} votes</span>
+                            <button
+                                    mat-flat-button
+                                    color="primary"
+                                    (click)="castVote(poll._id, option._id)"
+                            >
+                                Vote
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+</div>

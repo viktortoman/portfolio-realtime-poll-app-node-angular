@@ -1,0 +1,13 @@
+.w-full {
+    width: 100%;
+}
+
+.error-message {
+    color: #d9534f;
+    margin-top: -1rem;
+    font-size: 0.9rem;
+}
+
+.spinner-inline {
+    margin-right: 8px;
+}
